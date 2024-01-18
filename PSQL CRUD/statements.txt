@@ -1,0 +1,82 @@
+CREATE:
+-a single record in the companies table
+INSERT INTO companies (company_id)
+  VALUES ('new company')
+
+-a single record in the categories table
+INSERT INTO categories (company_id)
+  VALUES ('new category')
+
+-a single record in the products table
+INSERT INTO products (company_name, price, description, active)
+  VALUES ('new product', 10, 'this is our product', 1 )
+
+-a single record in the products_categories table
+INSERT INTO product_category (product_id, category_id)
+  VALUES (x, x);
+
+
+READ:
+-all records in the companies table
+SELECT *
+FROM companies
+
+-all records in the categories table
+SELECT * 
+FROM categories
+
+-all records in the products table
+SELECT *
+FROM products
+
+-all products that are active
+SELECT *
+FROM products
+WHERE active = True
+
+-all products with a particular company_id
+SELECT *
+FROM products
+WHERE company_id = x
+
+-a single company record by id
+SELECT company_name
+FROM companies
+WHERE company_id = x
+
+-a single category record by id (and all its associated products)
+SELECT *
+FROM categories, products_categories_xref, products
+WHERE category_id = x
+
+-a single product record by id (and all its associated categories)
+SELECT * 
+FROM products, products_categories_xref, categories
+WHERE product_id = x
+
+UPDATE:
+-one or more fields in a record from the companies table
+UPDATE companies
+SET company_name = 'new company name'
+WHERE company_name = 'old company name'
+
+-one or more fields in a record from the categories table
+UPDATE categories
+SET category_name = 'new category name'
+WHERE category_name = 'old category name'
+
+-one or more fields in a record from the products table
+UPDATE products
+SET price = 15
+WHERE product_id = x
+
+-one or more fields in a record from the productscategoriesxref table
+UPDATE products_categories_xref
+SET category_id = x
+WHERE product_id = x
+
+DELETE:
+-delete a record in the products table based on their id (make sure all associated records in the xref table are also deleted)
+
+DELETE FROM products, products_categories_xref, categories
+WHERE product_id = x
