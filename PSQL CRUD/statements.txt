@@ -1,10 +1,10 @@
 CREATE:
 -a single record in the companies table
-INSERT INTO companies (company_id)
+INSERT INTO companies (company_name)
   VALUES ('new company')
 
 -a single record in the categories table
-INSERT INTO categories (company_id)
+INSERT INTO categories (category_name)
   VALUES ('new category')
 
 -a single record in the products table
