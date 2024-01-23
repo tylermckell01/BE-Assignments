@@ -3,6 +3,7 @@ CREATE:
 INSERT INTO companies (company_name)
   VALUES ('new company')
 
+
 -a single record in the categories table
 INSERT INTO categories (category_name)
   VALUES ('new category')
@@ -46,13 +47,18 @@ WHERE company_id = x
 
 -a single category record by id (and all its associated products)
 SELECT *
-FROM categories, products_categories_xref, products
-WHERE category_id = x
+FROM categories c, products_categories_xref pc, products p
+WHERE c.category_id = pc.category_id
+and pc.product_id = p.product_id 
+and c.category_id = x
 
 -a single product record by id (and all its associated categories)
 SELECT * 
-FROM products, products_categories_xref, categories
-WHERE product_id = x
+FROM products p, products_categories_xref pc, categories c
+WHERE p.product_id = pc.product_id 
+and pc.category_id = c.category_id
+and product_id = x
+
 
 UPDATE:
 -one or more fields in a record from the companies table
@@ -75,8 +81,10 @@ UPDATE products_categories_xref
 SET category_id = x
 WHERE product_id = x
 
-DELETE:
--delete a record in the products table based on their id (make sure all associated records in the xref table are also deleted)
 
-DELETE FROM products, products_categories_xref, categories
-WHERE product_id = x
+DELETE:
+
+-delete a record in the products table based on their id (make sure all associated records in the xref table are also deleted)
+DELETE FROM products p, products_categories_xref pc
+WHERE p.product_id = pc.product_id
+and product_id = x
