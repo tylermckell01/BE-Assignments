@@ -11,8 +11,21 @@ cursor = conn.cursor()
 def create_all():
     print("Creating tables...")
     cursor.execute(""" 
+        CREATE TABLE IF NOT EXISTS companies (
+            company_id SERIAL PRIMARY KEY,
+            company_name VARCHAR UNIQUE NOT NULL
+        );
+""")
+    cursor.execute(""" 
+        CREATE TABLE IF NOT EXISTS categories (
+            category_id SERIAL PRIMARY KEY,
+            category_name VARCHAR UNIQUE NOT NULL
+        );
+""")
+    cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS products (          
             product_id SERIAL PRIMARY KEY,
+            company_id UUID REFERENCES companies(company_id),
             product_name VARCHAR NOT NULL UNIQUE,
             description VARCHAR,
             price FLOAT,
@@ -20,21 +33,9 @@ def create_all():
         );
 """)
     cursor.execute(""" 
-        CREATE TABLE IF NOT EXISTS companies (
-            company_id UUID4 PRIMARY KEY,
-            company_name VARCHAR UNIQUE NOT NULL
-        )
-""")
-    cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS products_categories_xref (
-            product_id UUID4,
-            category_id UUID4
-        )
-""")
-    cursor.execute(""" 
-        CREATE TABLE IF NOT EXISTS categories (
-            category_id UUID4 PRIMARY KEY,
-            category_name VARCHAR UNIQUE NOT NULL
-        )
+            product_id SERIAL REFERENCES products(product_id),
+            category_id SERIAL REFERENCES categories(category_id)
+        );
 """)
     conn.commit()
