@@ -25,7 +25,7 @@ def create_all():
     cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS products (          
             product_id SERIAL PRIMARY KEY,
-            company_id UUID REFERENCES companies(company_id),
+            company_id SERIAL REFERENCES companies(company_id),
             product_name VARCHAR NOT NULL UNIQUE,
             description VARCHAR,
             price FLOAT,
