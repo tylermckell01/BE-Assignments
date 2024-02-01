@@ -12,28 +12,29 @@ cursor = conn.cursor()
 def create_product():
     post_data = request.form if request.form else request.json
 
+    company_id = post_data.get('company_id')
     product_name = post_data.get('product_name')
     description = post_data.get('description')
     price = post_data.get('price')
+    # category_id = post_data.get('category_id')
 
     if not product_name:
         return jsonify({"message": "product_name is a required field"}), 400
-    
+
     cursor.execute("SELECT * FROM products WHERE product_name=%s", [product_name])
     result = cursor.fetchone()
 
     if result:
         return jsonify({"message": 'Product already exists'}), 400
-    
+
     cursor.execute(""" 
         INSERT INTO products
-        (product_name, description, price)
-        VALUES (%s, %s, %s)
-""", [product_name, description, price])
+        (company_id, product_name, description, price)
+        VALUES (%s, %s, %s, %s)
+""", [company_id, product_name, description, price])
     conn.commit()
 
     return jsonify({"message": f"product '{product_name}' added to DB"}), 201
-
 
 
 # product read functions
@@ -112,7 +113,7 @@ def read_product_by_id(id):
     SELECT * FROM products
     WHERE product_id = %s;
 """, [id])
-    
+
     results = cursor.fetchall()
 
     record_list = []
@@ -134,15 +135,17 @@ def read_product_by_id(id):
 def update_product_by_id(id):
     post_data = request.form if request.form else request.json
 
+    product_name = post_data.get('product_name')
+    description = post_data.get('description')
+    price = post_data.get('price')
     active = post_data.get('active')
-    # product_id = post_data.get('product_id')
 
     cursor.execute("""
     UPDATE products
-    SET active=%s
+    SET product_name=%s, description=%s, price=%s, active=%s
     WHERE product_id=%s;
-""", [active, id])
-    
+""", [product_name, description, price, active, id])
+
     conn.commit()
     return jsonify({"message": "product updated", "results": id}), 200
 
@@ -154,6 +157,6 @@ def delete_product(product_id):
     DELETE from products
     WHERE product_id=%s;
 """, [product_id])
-    
+
     conn.commit()
     return jsonify({"message": f"product {2} has been deleted"}), 200

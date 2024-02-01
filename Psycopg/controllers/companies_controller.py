@@ -16,13 +16,13 @@ def create_company():
 
     if not company_name:
         return jsonify({"message": "company_name is a required field"}), 400
-    
+
     cursor.execute("SELECT * FROM companies WHERE company_name=%s", [company_name])
     result = cursor.fetchone()
 
     if result:
         return jsonify({"message": 'Company already exists'}), 400
-    
+
     cursor.execute(""" 
         INSERT INTO companies
         (company_name)
@@ -33,11 +33,13 @@ def create_company():
     return jsonify({"message": f"Company '{company_name}' added to DB"}), 201
 
 # company READ functions
+
+
 def read_companies():
     cursor.execute(""" 
     SELECT * FROM companies;
 """)
-    
+
     results = cursor.fetchall()
 
     record_list = []
@@ -78,13 +80,13 @@ def update_company_name(id):
 
     if not company_name:
         return jsonify({"message": "company_name is a required field"}), 400
-    
+
     cursor.execute("SELECT * FROM companies WHERE company_name=%s", [company_name])
     result = cursor.fetchone()
 
     if result:
         return jsonify({"message": 'Company already exists'}), 400
-    
+
     cursor.execute(""" 
         UPDATE companies
         SET company_name=%s
@@ -93,3 +95,15 @@ def update_company_name(id):
     conn.commit()
 
     return jsonify({"message": f"Company '{company_name}' added to DB"}), 201
+
+
+# company DELETE function
+def delete_company(company_id):
+
+    cursor.execute("""
+    DELETE from products, categories
+    WHERE company_id=%s;
+""", [company_id])
+
+    conn.commit()
+    return jsonify({"message": f"company {company_id} has been deleted"}), 200

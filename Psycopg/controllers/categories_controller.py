@@ -8,6 +8,8 @@ conn = psycopg2.connect(f"dbname={database_name}")
 cursor = conn.cursor()
 
 # category CREATE functions
+
+
 def create_category():
     post_data = request.form if request.form else request.json
 
@@ -15,13 +17,13 @@ def create_category():
 
     if not category_name:
         return jsonify({"message": "category_name is a required field"}), 400
-    
+
     cursor.execute("SELECT * FROM categories WHERE category_name=%s", [category_name])
     result = cursor.fetchone()
 
     if result:
         return jsonify({"message": 'Category already exists'}), 400
-    
+
     cursor.execute(""" 
         INSERT INTO categories
         (category_name)
@@ -37,7 +39,7 @@ def read_categories():
     cursor.execute(""" 
     SELECT * FROM categories;
 """)
-    
+
     results = cursor.fetchall()
 
     record_list = []
@@ -57,7 +59,7 @@ def read_by_category_id(id):
     SELECT * FROM categories
     WHERE category_id = %s;
 """, [id])
-    
+
     results = cursor.fetchall()
 
     record_list = []
@@ -84,7 +86,19 @@ def update_category_name(id):
     SET category_name=%s
     WHERE category_id=%s;
 """, [category_name, id])
-    
+
     conn.commit()
 
     return jsonify({"message": f"category {id} has been changed to '{category_name}'"}), 201
+
+
+# category DELETE functions
+def delete_category(category_id):
+
+    cursor.execute("""
+    DELETE from products, categories
+    WHERE category_id=%s;
+""", [category_id])
+
+    conn.commit()
+    return jsonify({"message": f"category {category_id} has been deleted"}), 200
