@@ -21,7 +21,7 @@ def create_company():
     result = cursor.fetchone()
 
     if result:
-        return jsonify({"message": 'Company already exists'}), 400
+        return jsonify({"message": 'company already exists'}), 400
 
     cursor.execute(""" 
         INSERT INTO companies
@@ -30,7 +30,7 @@ def create_company():
 """, [company_name])
     conn.commit()
 
-    return jsonify({"message": f"Company '{company_name}' added to DB"}), 201
+    return jsonify({"message": f"company '{company_name}' added to DB"}), 201
 
 # company READ functions
 
@@ -50,7 +50,7 @@ def read_companies():
         }
         record_list.append(record)
 
-    return jsonify({"message": "Companies found", "results": record_list}), 200
+    return jsonify({"message": "companies found", "results": record_list}), 200
 
 
 def read_company_by_id(id):
@@ -76,7 +76,6 @@ def update_company_name(id):
     post_data = request.form if request.form else request.json
 
     company_name = post_data.get('company_name')
-    # company_id = post_data.get('company_id')
 
     if not company_name:
         return jsonify({"message": "company_name is a required field"}), 400
@@ -85,7 +84,7 @@ def update_company_name(id):
     result = cursor.fetchone()
 
     if result:
-        return jsonify({"message": 'Company already exists'}), 400
+        return jsonify({"message": 'company already exists'}), 400
 
     cursor.execute(""" 
         UPDATE companies
@@ -94,7 +93,7 @@ def update_company_name(id):
 """, [company_name, id])
     conn.commit()
 
-    return jsonify({"message": f"Company '{company_name}' added to DB"}), 201
+    return jsonify({"message": f"company '{company_name}' updated"}), 200
 
 
 # company DELETE function

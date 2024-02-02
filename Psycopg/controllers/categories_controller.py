@@ -22,7 +22,7 @@ def create_category():
     result = cursor.fetchone()
 
     if result:
-        return jsonify({"message": 'Category already exists'}), 400
+        return jsonify({"message": 'category already exists'}), 400
 
     cursor.execute(""" 
         INSERT INTO categories
@@ -31,7 +31,7 @@ def create_category():
 """, [category_name])
     conn.commit()
 
-    return jsonify({"message": f"Category '{category_name}' added to DB"}), 201
+    return jsonify({"message": f"category '{category_name}' added to DB"}), 201
 
 
 # category READ functions
@@ -89,7 +89,7 @@ def update_category_name(id):
 
     conn.commit()
 
-    return jsonify({"message": f"category {id} has been changed to '{category_name}'"}), 201
+    return jsonify({"message": f"category {id} has been changed to '{category_name}'"}), 200
 
 
 # category DELETE functions

@@ -108,7 +108,6 @@ def read_products_by_company_id(id):
 
 
 def read_product_by_id(id):
-
     cursor.execute(""" 
     SELECT * FROM products
     WHERE product_id = %s;
@@ -159,4 +158,4 @@ def delete_product(product_id):
 """, [product_id])
 
     conn.commit()
-    return jsonify({"message": f"product {2} has been deleted"}), 200
+    return jsonify({"message": f"product {product_id} has been deleted"}), 200
