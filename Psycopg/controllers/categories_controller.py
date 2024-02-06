@@ -79,7 +79,6 @@ def update_category_name(id):
     post_data = request.form if request.form else request.json
 
     category_name = post_data.get('category_name')
-    # category_id = post_data.get('category_name')
 
     cursor.execute(""" 
     UPDATE categories

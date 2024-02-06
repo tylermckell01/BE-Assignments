@@ -6,7 +6,7 @@ companies = Blueprint('companies', __name__)
 
 
 # company CREATE routes
-@companies.route('/companies', methods=['POST'])
+@companies.route('/company', methods=['POST'])
 def create_new_company():
     return controllers.create_company()
 
@@ -17,18 +17,18 @@ def read_all_companies():
     return controllers.read_companies()
 
 
-@companies.route('/companies/<id>', methods=['GET'])
+@companies.route('/company/<id>', methods=['GET'])
 def read_company_by_id(id):
     return controllers.read_company_by_id(id)
 
 
 # company UPDATE route
-@companies.route('/companies/<id>', methods=['PUT'])
+@companies.route('/company/<id>', methods=['PUT'])
 def update_company_name_by_id(id):
     return controllers.update_company_name(id)
 
 
 # company DELETE route
-@companies.route('/companies/<id>', methods=['DELETE'])
+@companies.route('/company/<id>', methods=['DELETE'])
 def delete_company_by_id(id):
     return controllers.delete_company(id)
