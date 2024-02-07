@@ -19,13 +19,13 @@ def read_all_companies():
 
 @companies.route('/company/<id>', methods=['GET'])
 def read_company_by_id(id):
-    return controllers.read_company_by_id(request, id)
+    return controllers.read_company_by_id(id)
 
 
 # company UPDATE route
 @companies.route('/company/<id>', methods=['PUT'])
 def update_company_name_by_id(id):
-    return controllers.update_company_name(id)
+    return controllers.update_company_name(request, id)
 
 
 # company DELETE route

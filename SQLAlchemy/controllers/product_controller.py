@@ -69,7 +69,7 @@ def read_products():
 
     products_list = []
 
-    for product in query.Products:
+    for product in query:
         products_list.append({
             'product_id': product.product_id,
             'product_name': product.product_name,
@@ -83,11 +83,11 @@ def read_products():
 
 
 def read_active_products():
-    query = db.session.query(Products).filter(active = True).all()
+    query = db.session.query(Products).filter(Products.active == True).all()
 
     products_list = []
 
-    for product in query.Products:
+    for product in query:
         products_list.append({
             'product_id': product.product_id,
             'product_name': product.product_name,
@@ -105,7 +105,7 @@ def read_products_by_company_id(company_id):
 
     products_list = []
 
-    for product in query.Products:
+    for product in query:
         products_list.append({
             'product_id': product.product_id,
             'product_name': product.product_name,
@@ -139,18 +139,22 @@ def update_product_by_id(req, product_id):
     post_data = req.form if req.form else req.json
     query = db.session.query(Products).filter(Products.product_id == product_id).first()
 
-    query.product_name = post_data.req.get('product_name', query.product_name)
-    query.description = post_data.req.get('description', query.description)
-    query.price = post_data.req.get('price', query.price)
-    query.active = post_data.req.get('active', query.active)
+    query.product_name = post_data.get('product_name', query.product_name)
+    query.description = post_data.get('description', query.description)
+    query.price = post_data.get('price', query.price)
+    query.active = post_data.get('active', query.active)
+    query.company_id = post_data.get('company_id', query.company_id)
+
+
 
 
     try:
         db.session.commit()
-        return jsonify({'message': f'product {product_id} has been successfully updated'}), 200
     except:
         db.session.rollback()
         return jsonify({'message': f'product {product_id} could not be updated'}), 400
+        
+    return jsonify({'message': f'product {product_id} has been successfully updated'}), 200
 
 
 # product delete function
@@ -167,4 +171,4 @@ def delete_product(product_id):
         db.session.rollback()
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "product deleted", "results": query}), 200
+    return jsonify({"message": "product has been deleted"}), 200

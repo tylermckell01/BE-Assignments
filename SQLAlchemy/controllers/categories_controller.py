@@ -20,10 +20,10 @@ def create_category(req):
 
         values[field] = field_data
 
-    new_company = Categories(values['category_name'])
+    new_category = Categories(values['category_name'])
 
     try:
-        db.session.add(new_company)
+        db.session.add(new_category)
         db.session.commit()
     except:
         db.session.rollback()
@@ -42,7 +42,7 @@ def read_categories():
 
     categories_list = []
 
-    for category in query.categories:
+    for category in query:
         categories_list.append({
             'category_name': category.category_name,
             'category_id': category.category_id
@@ -70,14 +70,14 @@ def update_category_name(req, category_id):
     post_data = req.form if req.form else req.json
     query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
 
-    query.category_name = post_data.req.get('category_name', query.category_name)
+    query.category_name = post_data.get('category_name', query.category_name)
 
     try:
         db.session.commit()
-        return jsonify({'message': f'category {category_id} has been successfully updated'})
+        return jsonify({'message': f'category has been successfully updated'})
     except:
         db.session.rollback()
-        return jsonify({'message': f'category {category_id} could not be updated'})
+        return jsonify({'message': f'category could not be updated'})
 
 
 # category DELETE functions
@@ -85,7 +85,7 @@ def delete_category(category_id):
     query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
 
     if not query:
-        return jsonify({"message": f"category by id {category_id} does not exist"}), 400    
+        return jsonify({"message": f"category does not exist"}), 400    
 
     try:
         db.session.delete(query)

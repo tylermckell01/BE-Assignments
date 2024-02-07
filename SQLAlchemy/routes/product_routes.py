@@ -34,7 +34,7 @@ def read_product_by_product_id(id):
 
 # product UPDATE route
 @product.route('/product/<id>', methods=['PUT'])
-def update_product_active_status(id):
+def update_product(id):
     return controllers.update_product_by_id(request, id)
 
 
