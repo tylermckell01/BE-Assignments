@@ -6,7 +6,7 @@ product = Blueprint('product', __name__)
 
 
 # product CREATE routes
-@product.route('/products', methods=['POST'])
+@product.route('/product', methods=['POST'])
 def create_new_product():
     return controllers.create_product(request)
 

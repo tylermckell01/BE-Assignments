@@ -29,6 +29,6 @@ def update_company_name_by_id(id):
 
 
 # company DELETE route
-@companies.route('/company/<id>', methods=['DELETE'])
+@companies.route('/company/delete/<id>', methods=['DELETE'])
 def delete_company_by_id(id):
     return controllers.delete_company(id)

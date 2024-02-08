@@ -44,6 +44,9 @@ def create_product(req):
 def read_products():
     query = db.session.query(Products).all()
 
+    if not query:
+        return jsonify({"message": f"no products exist yet"}), 400
+
     products_list = []
 
     for product in query:
@@ -62,6 +65,9 @@ def read_products():
 def read_active_products():
     query = db.session.query(Products).filter(Products.active == True).all()
 
+    if not query:
+        return jsonify({"message": f"no active products exist yet"}), 400
+
     products_list = []
 
     for product in query:
@@ -79,6 +85,9 @@ def read_active_products():
 
 def read_products_by_company_id(company_id):
     query = db.session.query(Products).filter(Products.company_id == company_id).all()
+
+    if not query:
+        return jsonify({"message": f"no products associated with id {company_id} exist"}), 400
 
     products_list = []
 
@@ -105,6 +114,7 @@ def read_product_by_id(product_id):
         'description': query.description,
         'price': query.price,
         'product_id': query.product_id,
+        'company_id': query.company_id,
         'active': query.active
     }
 
@@ -128,7 +138,15 @@ def update_product_by_id(req, product_id):
         db.session.rollback()
         return jsonify({'message': f'product {product_id} could not be updated'}), 400
 
-    return jsonify({'message': f'product {product_id} has been successfully updated'}), 200
+    updated_data = {
+        'product_name': query.product_name,
+        'description': query.description,
+        'price': query.price,
+        'active': query.active,
+        'company_id': query.company_id
+    }
+
+    return jsonify({'message': f'product {product_id} has been successfully updated', 'results': updated_data}), 200
 
 
 # product delete function

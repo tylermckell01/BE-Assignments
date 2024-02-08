@@ -40,6 +40,9 @@ def create_company(req):
 def read_companies():
     query = db.session.query(Companies).all()
 
+    if not query:
+        return jsonify({"message": f"no companies exist yet"}), 400
+
     companies_list = []
 
     for company in query:
@@ -73,24 +76,33 @@ def update_company_name(req, company_id):
 
     try:
         db.session.commit()
-        return jsonify({'message': f'company has been successfully updated'})
+
     except:
         db.session.rollback()
-        return jsonify({'message': f'company could not be updated'})
+        return jsonify({'message': f'company could not be updated'}), 400
 
+    updated_data = {
+        'company_name': query.company_name,
+        'company_id': query.company_id
+    }
+
+    return jsonify({'message': f'company has been successfully updated', 'results': updated_data}), 200
 
 # company DELETE function
+
+
 def delete_company(company_id):
     query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
 
     if not query:
-        return jsonify({"message": f"that company does not exist"}), 400    
+        return jsonify({"message": f"that company does not exist"}), 400
 
     try:
         db.session.delete(query)
         db.session.commit()
-    except:
+    except Exception as e:
         db.session.rollback()
+        print(e)
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "company deleted", "results": query}), 200
+    return jsonify({"message": "company deleted"}), 200

@@ -5,6 +5,7 @@ from models.category import Categories
 
 # category CREATE functions
 
+
 def create_category(req):
     post_data = req.form if req.form else req.json
 
@@ -40,6 +41,9 @@ def create_category(req):
 def read_categories():
     query = db.session.query(Categories).all()
 
+    if not query:
+        return jsonify({"message": f"no categories exist yet"}), 400
+
     categories_list = []
 
     for category in query:
@@ -74,10 +78,16 @@ def update_category_name(req, category_id):
 
     try:
         db.session.commit()
-        return jsonify({'message': f'category has been successfully updated'})
     except:
         db.session.rollback()
         return jsonify({'message': f'category could not be updated'})
+
+    updated_data = {
+        'category_name': query.category_name,
+        'category_id': query.category_id
+    }
+
+    return jsonify({'message': f'category has been successfully updated', 'results': updated_data})
 
 
 # category DELETE functions
@@ -85,7 +95,7 @@ def delete_category(category_id):
     query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
 
     if not query:
-        return jsonify({"message": f"category does not exist"}), 400    
+        return jsonify({"message": f"category does not exist"}), 400
 
     try:
         db.session.delete(query)
@@ -94,4 +104,4 @@ def delete_category(category_id):
         db.session.rollback()
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "category deleted", "results": query}), 200
+    return jsonify({"message": "category deleted"}), 200
