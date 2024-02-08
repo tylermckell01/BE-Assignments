@@ -1,4 +1,4 @@
-from flask import jsonify, Request 
+from flask import jsonify, Request
 
 from db import db
 from models.product import Products
@@ -8,19 +8,17 @@ from models.product import Products
 def create_product(req):
     post_data = req.form if req.form else req.json
 
-    fields = ['product_name', 'description', 'price', 'company_id']
-    required_fields = ['product_name', 'price', 'company_id']
+    product_name = post_data.get('product_name')
 
-    values = {}
+    if not post_data.get('description'):
+        description = ''
+    else:
+        description = post_data.get('description')
 
-    for field in fields:
-        field_data = post_data.get(field)
-        if field_data in required_fields and not field_data:
-            return jsonify({'message': f'{field} is required '}), 400
+    price = post_data.get('price')
+    company_id = post_data.get('company_id')
 
-        values[field] = field_data
-
-    new_product = Products(values['product_name'], values['description'], values['price'], values['company_id'])
+    new_product = Products(product_name, description, price, company_id)
 
     try:
         db.session.add(new_product)
@@ -29,38 +27,17 @@ def create_product(req):
         db.session.rollback()
         return jsonify({'message': 'unable to create product'}), 400
 
-    query = db.session.query(Products).filter(Products.product_name == values['product_name']).first()
+    query = db.session.query(Products).filter(Products.product_name == product_name).first()
 
-    values['product_id'] = query.product_id
+    new_product = {
+        'product_id': query.product_id,
+        'product_name': query.product_name,
+        'description': query.description,
+        'price': query.price,
+        'company_id': query.company_id,
+    }
 
-    return jsonify({'message': 'product created', 'result': values}), 201
-
-    # post_data = req.form if req.form else req.json
-    
-    # product_name = post_data.get['product_name']
-
-    # if description not in post_data:
-    #     description = ''
-    # else:
-    #     description = post_data.get['description']
-
-    # price = post_data.get['price']
-    # company_id = post_data.get['company_id']
-
-    # new_product = Products(product_name, description, price, company_id)
-
-    # try:
-    #     db.session.add(new_product)
-    #     db.session.commit()
-    # except:
-    #     db.session.rollback()
-    #     return jsonify({'message': 'unable to create product'}), 400
-
-    # query = db.session.query(Products).filter(Products.product_name == product_name).first()
-
-    # query['product_id'] = query.product_id
-
-    # return jsonify({'message': 'product created', 'result': new_product}), 201
+    return jsonify({'message': 'product created', 'result': new_product}), 201
 
 
 # product read functions
@@ -145,15 +122,12 @@ def update_product_by_id(req, product_id):
     query.active = post_data.get('active', query.active)
     query.company_id = post_data.get('company_id', query.company_id)
 
-
-
-
     try:
         db.session.commit()
     except:
         db.session.rollback()
         return jsonify({'message': f'product {product_id} could not be updated'}), 400
-        
+
     return jsonify({'message': f'product {product_id} has been successfully updated'}), 200
 
 
@@ -162,7 +136,7 @@ def delete_product(product_id):
     query = db.session.query(Products).filter(Products.product_id == product_id).first()
 
     if not query:
-        return jsonify({"message": f"product by id {product_id} does not exist"}), 400    
+        return jsonify({"message": f"product by id {product_id} does not exist"}), 400
 
     try:
         db.session.delete(query)
