@@ -38,7 +38,14 @@ def update_product(id):
     return controllers.update_product_by_id(request, id)
 
 
+# CREATE xref route
+@product.route('/product/category-add', methods=['PUT'])
+def add_xref():
+    return controllers.product_add_category(request)
+
 # product DELETE route
+
+
 @product.route('/product/delete/<id>', methods=['DELETE'])
 def delete_product_by_id(id):
     return controllers.delete_product(id)

@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
-import psycopg2
+# import psycopg2
 import os
 
 from db import *
-from models.category import Categories
-from models.company import Companies
-from models.product import Products 
+# from models.category import Categories
+# from models.company import Companies
+# from models.product import Products
 import routes
 
 flask_host = os.environ.get("FLASK_HOST")
@@ -29,12 +29,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 init_db(app, db)
 
+
 def create_tables():
     with app.app_context():
         print("Creating tables...")
         db.create_all()
         print("Tables created successfully")
 
+
 if __name__ == '__main__':
     create_tables()
-    app.run(host=flask_host, port = flask_port)
+    app.run(host=flask_host, port=flask_port)

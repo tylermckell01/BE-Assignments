@@ -2,6 +2,7 @@ from flask import jsonify, Request
 
 from db import db
 from models.product import Products
+from models.category import Categories
 
 
 # product CREATE functions
@@ -149,7 +150,22 @@ def update_product_by_id(req, product_id):
     return jsonify({'message': f'product {product_id} has been successfully updated', 'results': updated_data}), 200
 
 
+# add product-category-xref record
+def product_add_category(req):
+    post_data = req.form if req.form else req.json
+    product_id = post_data.get('product_id')
+    category_id = post_data.get('category_id')
+
+    product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
+    category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
+
+    product_query.categories.append(category_query)
+    db.session.commit()
+    return jsonify({'message': 'category added.', 'product': product_id}), 200
+
 # product delete function
+
+
 def delete_product(product_id):
     query = db.session.query(Products).filter(Products.product_id == product_id).first()
 
