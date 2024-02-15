@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 import psycopg2
 import os
 
@@ -17,9 +17,6 @@ database_name = os.environ.get("DATABASE_NAME")
 
 app = Flask(__name__)
 
-# app.register_blueprint(routes.categories)
-# app.register_blueprint(routes.companies)
-# app.register_blueprint(routes.product)
 register_blueprints(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"{database_scheme}{database_user}@{database_address}:{database_port}/{database_name}"

@@ -17,7 +17,7 @@ class Products(db.Model):
     company_id = db.Column(UUID(as_uuid=True), db.ForeignKey("Companies.company_id"), nullable=False)
 
     company = db.relationship("Companies", foreign_keys="[Products.company_id]", back_populates='products')
-    categories = db.relationship("Categories", secondary=products_categories_association_table, back_populates='products', cascade='all,delete')
+    categories = db.relationship("Categories", secondary=products_categories_association_table, back_populates='products')
 
     def __init__(self, product_name, description, price, company_id, active=True):
         self.product_name = product_name
@@ -32,7 +32,7 @@ class Products(db.Model):
 
 class ProductsSchema(ma.Schema):
     class Meta:
-        fields = ['product_id', 'product_name', 'description', 'price', 'active', 'company_id', 'company', 'categories']
+        fields = ['product_id', 'product_name', 'description', 'price', 'active', 'company', 'categories']
     company = ma.fields.Nested('CompaniesSchema', exclude=['products'])
     categories = ma.fields.Nested('CategoriesSchema', many=True, exclude=['products'])
 

@@ -39,7 +39,7 @@ def update_product(id):
 
 
 # CREATE xref route
-@product.route('/product/category-add', methods=['PUT'])
+@product.route('/product/category', methods=['POST'])
 def add_xref():
     return controllers.product_add_category(request)
 

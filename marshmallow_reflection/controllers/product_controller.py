@@ -10,6 +10,12 @@ from util.reflection import populate_object
 def create_product(req):
     post_data = req.form if req.form else req.json
 
+    product_name = post_data.get('product_name')
+    exists_query = db.session.query(Products).filter(Products.product_name == product_name).first()
+
+    if exists_query:
+        return jsonify({'message': f'product "{product_name}" already exists in the database'}), 400
+
     new_product = Products.new_product_obj()
     populate_object(new_product, post_data)
 
@@ -18,7 +24,6 @@ def create_product(req):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print(e)
         return jsonify({'message': 'product could not be created'}), 400
 
     return jsonify({'message': 'product created', 'result': product_schema.dump(new_product)}), 201
@@ -62,7 +67,7 @@ def update_product_by_id(req, product_id):
         db.session.rollback()
         return jsonify({'message': 'product could not be updated'}), 400
 
-    return jsonify({'message': 'product updated'}), 200
+    return jsonify({'message': 'product updated', 'result': product_schema.dump(product_query)}), 200
 
 
 # add product-category-xref record
@@ -77,7 +82,7 @@ def product_add_category(req):
     product_query.categories.append(category_query)
     db.session.commit()
 
-    return jsonify({'message': 'relationship added.', 'product': product_id}), 200
+    return jsonify({'message': 'relationship added.', 'product info': product_schema.dump(product_query)}), 200
 
 # product delete function
 

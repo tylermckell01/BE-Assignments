@@ -11,6 +11,12 @@ from util.reflection import populate_object
 def create_category(req):
     post_data = req.form if req.form else req.json
 
+    category_name = post_data.get('category_name')
+    exists_query = db.session.query(Categories).filter(Categories.category_name == category_name).first()
+
+    if exists_query:
+        return jsonify({'message': f'category "{category_name}" already exists in the database'}), 400
+
     new_category = Categories.new_category_obj()
     populate_object(new_category, post_data)
 
@@ -48,9 +54,9 @@ def update_category_name(req, category_id):
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({'message': 'category could not be updated'})
+        return jsonify({'message': 'category could not be updated'}), 400
 
-    return jsonify({'message': 'category updated'})
+    return jsonify({'message': 'category updated', 'result': category_schema.dump(category_query)}), 201
 
 
 # category DELETE functions

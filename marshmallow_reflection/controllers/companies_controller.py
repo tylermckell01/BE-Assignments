@@ -10,6 +10,12 @@ from util.reflection import populate_object
 def create_company(req):
     post_data = req.form if req.form else req.json
 
+    company_name = post_data.get('company_name')
+    exists_query = db.session.query(Companies).filter(Companies.company_name == company_name).first()
+
+    if exists_query:
+        return jsonify({'message': f'company "{company_name}" already exists in the database'}), 400
+
     new_company = Companies.new_company_obj()
     populate_object(new_company, post_data)
 
@@ -18,10 +24,9 @@ def create_company(req):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print(e)
         return jsonify({'message': 'company could not be created'}), 400
 
-    return jsonify({'message': 'company created', 'result': company_schema.dump(new_company)}), 200
+    return jsonify({'message': 'company created', 'result': company_schema.dump(new_company)}), 201
 
 
 # company READ functions
@@ -48,9 +53,9 @@ def update_company_name(req, company_id):
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({'message': 'company could not be updated'})
+        return jsonify({'message': 'company could not be updated'}), 400
 
-    return jsonify({'message': 'company updated'})
+    return jsonify({'message': 'company updated', 'result': company_schema.dump(company_query)}), 200
 
 
 # company DELETE function
