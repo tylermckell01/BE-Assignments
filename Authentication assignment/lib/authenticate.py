@@ -39,7 +39,6 @@ def fail_response():
 def auth(func):
     @functools.wraps(func)
     def wrapper_auth_return(*args, **kwargs):
-        print(args)
         auth_info = validate_token(args[0])
 
         if auth_info:
