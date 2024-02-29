@@ -60,9 +60,6 @@ def auth_admin(func):
         if admin_query.role == "admin" and auth_info:
             return func(*args, **kwargs)
 
-        elif auth_info:
-            return jsonify({"message": "you must be an admin to perform this action"}), 401
-
         else:
             return fail_response()
 
