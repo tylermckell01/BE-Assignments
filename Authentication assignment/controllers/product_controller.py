@@ -1,14 +1,14 @@
 from flask import jsonify
 
 from db import db
-from lib.authenticate import auth
+from lib.authenticate import auth, auth_admin
 from models.product import Products, product_schema, products_schema
 from models.category import Categories
 from util.reflection import populate_object
 
 
 # product CREATE functions
-@auth
+@auth_admin
 def create_product(req):
     post_data = req.form if req.form else req.json
 
@@ -32,31 +32,36 @@ def create_product(req):
 
 
 # product read functions
-def read_products():
+@auth
+def read_products(req):
     product_query = db.session.query(Products).all()
 
     return jsonify({'message': 'products found', 'result': products_schema.dump(product_query)}), 200
 
 
-def read_active_products():
+@auth
+def read_active_products(req):
     product_query = db.session.query(Products).filter(Products.active == True).all()
 
     return jsonify({'message': 'product found', 'result': products_schema.dump(product_query)}), 200
 
 
-def read_products_by_company_id(company_id):
+@auth
+def read_products_by_company_id(req, company_id):
     product_query = db.session.query(Products).filter(Products.company_id == company_id).all()
 
     return jsonify({'message': 'product found', 'result': products_schema.dump(product_query)}), 200
 
 
-def read_product_by_id(product_id):
+@auth
+def read_product_by_id(req, product_id):
     product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
 
     return jsonify({'message': 'product found', 'result': product_schema.dump(product_query)}), 200
 
 
 # product update functions
+@auth_admin
 def update_product_by_id(req, product_id):
     post_data = req.form if req.form else req.json
     product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
@@ -73,6 +78,7 @@ def update_product_by_id(req, product_id):
 
 
 # add product-category-xref record
+@auth_admin
 def product_add_category(req):
     post_data = req.form if req.form else req.json
     product_id = post_data.get('product_id')
@@ -89,7 +95,8 @@ def product_add_category(req):
 # product delete function
 
 
-def delete_product(product_id):
+@auth_admin
+def delete_product(req, product_id):
     query = db.session.query(Products).filter(Products.product_id == product_id).first()
 
     if not query:

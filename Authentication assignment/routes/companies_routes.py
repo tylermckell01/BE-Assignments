@@ -14,12 +14,12 @@ def create_new_company():
 # company READ routes
 @companies.route('/companies', methods=['GET'])
 def read_all_companies():
-    return controllers.read_companies()
+    return controllers.read_companies(request)
 
 
 @companies.route('/company/<id>', methods=['GET'])
 def read_company_by_id(id):
-    return controllers.read_company_by_id(id)
+    return controllers.read_company_by_id(request, id)
 
 
 # company UPDATE route
@@ -31,4 +31,4 @@ def update_company_name_by_id(id):
 # company DELETE route
 @companies.route('/company/delete/<id>', methods=['DELETE'])
 def delete_company_by_id(id):
-    return controllers.delete_company(id)
+    return controllers.delete_company(request, id)

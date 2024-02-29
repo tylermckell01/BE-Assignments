@@ -1,13 +1,13 @@
 from flask import jsonify
 
 from db import db
+from lib.authenticate import auth, auth_admin
 from models.category import Categories, category_schema, categories_schema
 from util.reflection import populate_object
 
 
 # category CREATE functions
-
-
+@auth_admin
 def create_category(req):
     post_data = req.form if req.form else req.json
 
@@ -31,19 +31,22 @@ def create_category(req):
 
 
 # category READ functions
-def read_categories():
+@auth
+def read_categories(req):
     category_query = db.session.query(Categories).all()
 
     return jsonify({'message': 'categories found', 'result': categories_schema.dump(category_query)}), 200
 
 
-def read_by_category_id(category_id):
+@auth
+def read_by_category_id(req, category_id):
     category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
 
     return jsonify({'message': 'category found', 'result': category_schema.dump(category_query)}), 200
 
 
 # category UPDATE functions
+@auth_admin
 def update_category_name(req, category_id):
     post_data = req.form if req.form else req.json
     category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
@@ -60,7 +63,8 @@ def update_category_name(req, category_id):
 
 
 # category DELETE functions
-def delete_category(category_id):
+@auth_admin
+def delete_category(req, category_id):
     query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
 
     if not query:

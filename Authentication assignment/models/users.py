@@ -12,22 +12,24 @@ class Users(db.Model):
     last_name = db.Column(db.String(), nullable=False)
     email = db.Column(db.String(), nullable=False, unique=True)
     password = db.Column(db.String(), nullable=False)
+    role = db.Column(db.String(), nullable=False)
 
     auth = db.relationship("AuthTokens", back_populates="user")
 
-    def __init__(self, first_name, last_name, email, password):
+    def __init__(self, first_name, last_name, email, password, role):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
+        self.role = role
 
     def get_new_user():
-        return Users('', '', '', '')
+        return Users('', '', '', '', '')
 
 
 class UsersSchema(ma.Schema):
     class Meta:
-        fields = ['user_id', 'first_name', 'last_name', 'email']
+        fields = ['user_id', 'first_name', 'last_name', 'role', 'email']
 
 
 user_schema = UsersSchema()

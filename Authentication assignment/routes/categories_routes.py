@@ -15,12 +15,12 @@ def create_new_category():
 # category READ routes
 @categories.route('/categories', methods=['GET'])
 def read_all_categories():
-    return controllers.read_categories()
+    return controllers.read_categories(request)
 
 
 @categories.route('/category/<id>', methods=['GET'])
 def read_by_category_id(id):
-    return controllers.read_by_category_id(id)
+    return controllers.read_by_category_id(request, id)
 
 
 # category UPDATE routes
@@ -32,4 +32,4 @@ def update_category_name_by_id(id):
 # category DELETE routes
 @categories.route('/category/delete/<id>', methods=['DELETE'])
 def delete_category_by_id(id):
-    return controllers.delete_category(id)
+    return controllers.delete_category(request, id)

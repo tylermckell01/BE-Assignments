@@ -1,12 +1,14 @@
 from flask import jsonify
 
 from db import db
+from lib.authenticate import auth, auth_admin
 from models.company import Companies, company_schema, companies_schema
 from util.reflection import populate_object
 
 # company CREATE functions
 
 
+@auth_admin
 def create_company(req):
     post_data = req.form if req.form else req.json
 
@@ -30,19 +32,22 @@ def create_company(req):
 
 
 # company READ functions
-def read_companies():
+@auth
+def read_companies(req):
     company_query = db.session.query(Companies).all()
 
     return jsonify({'message': 'companies found', 'result': companies_schema.dump(company_query)}), 200
 
 
-def read_company_by_id(company_id):
+@auth
+def read_company_by_id(req, company_id):
     company_query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
 
     return jsonify({'message': 'company found', 'result': company_schema.dump(company_query)}), 200
 
 
 # company UPDATE function
+@auth_admin
 def update_company_name(req, company_id):
     post_data = req.form if req.form else req.json
     company_query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
@@ -59,7 +64,8 @@ def update_company_name(req, company_id):
 
 
 # company DELETE function
-def delete_company(company_id):
+@auth_admin
+def delete_company(req, company_id):
     query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
 
     if not query:
