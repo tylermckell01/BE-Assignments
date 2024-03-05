@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 from db import db
-from models.__init__ import Users, UsersSchema
+from models.users import Users, UsersSchema
 
 
 class AuthTokens(db.Model):
@@ -22,8 +22,8 @@ class AuthTokens(db.Model):
 
 class AuthTokenSchema(ma.Schema):
     class Meta:
-        fields = ['auth_token', 'user', 'expiration']
-    user = ma.fields.Nested('UsersSchema', only=['user_id', 'first_name', 'last_name', 'role', 'email'])
+        fields = ['auth_token', 'user', 'active', 'expiration']
+    user = ma.fields.Nested('UsersSchema', only=['user_id', 'first_name', 'last_name', 'role', 'email', 'active'])
 
 
 auth_token_schema = AuthTokenSchema()

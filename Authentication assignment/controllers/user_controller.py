@@ -7,7 +7,6 @@ from models.users import Users, user_schema, users_schema
 from util.reflection import populate_object
 
 
-@auth_admin
 def add_user(req):
     post_data = req.form if req.form else req.json
 
@@ -24,7 +23,7 @@ def add_user(req):
         db.session.rollback()
         return jsonify({"message": 'user could not be created'}), 400
 
-    return jsonify({"message": "user created", "results": user_schema.dump(new_user)}), 200
+    return jsonify({"message": "user created", "results": user_schema.dump(new_user)}), 201
 
 
 @auth

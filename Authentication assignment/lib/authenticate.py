@@ -54,9 +54,9 @@ def auth_admin(func):
     @functools.wraps(func)
     def wrapper_auth_return(*args, **kwargs):
         auth_info = validate_token(args[0])
-        admin_query = db.session.query(Users).filter(Users.user_id == auth_info.user.user_id).first()
+        # admin_query = db.session.query(Users).filter(Users.user_id == auth_info.user.user_id).first()
 
-        if admin_query.role == "admin" and auth_info:
+        if auth_info and auth_info.user.role == "admin":
             return func(*args, **kwargs)
 
         else:

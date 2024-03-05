@@ -59,7 +59,7 @@ def update_category_name(req, category_id):
         db.session.rollback()
         return jsonify({'message': 'category could not be updated'}), 400
 
-    return jsonify({'message': 'category updated', 'result': category_schema.dump(category_query)}), 201
+    return jsonify({'message': 'category updated', 'result': category_schema.dump(category_query)}), 200
 
 
 # category DELETE functions
