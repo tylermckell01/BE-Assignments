@@ -64,21 +64,16 @@ UPDATE:
 -one or more fields in a record from the companies table
 UPDATE companies
 SET company_name = 'new company name'
-WHERE company_name = 'old company name'
+WHERE company_id = x
 
 -one or more fields in a record from the categories table
 UPDATE categories
 SET category_name = 'new category name'
-WHERE category_name = 'old category name'
+WHERE category_id = x
 
 -one or more fields in a record from the products table
 UPDATE products
 SET price = 15
-WHERE product_id = x
-
--one or more fields in a record from the productscategoriesxref table
-UPDATE products_categories_xref
-SET category_id = x
 WHERE product_id = x
 
 
