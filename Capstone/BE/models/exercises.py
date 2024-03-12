@@ -26,8 +26,8 @@ class Exercises(db.Model):
 
 class ExercisesSchema(ma.Schema):
     class Meta:
-        fields = ['exercise_id', 'exercise_name', 'workouts']
-    workouts = ma.fields.Nested('WorkoutSchema', many=True, exclude=['exercises'])
+        fields = ['exercise_name', 'muscles_worked', 'exercise_id', 'workouts']
+    workouts = ma.fields.Nested('WorkoutsSchema', many=True, exclude=['exercises'])
 
 
 exercise_schema = ExercisesSchema()

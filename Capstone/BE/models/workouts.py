@@ -15,7 +15,7 @@ class Workouts(db.Model):
     length = db.Column(db.Float(), nullable=False)
     gym_id = db.Column(UUID(as_uuid=True), db.ForeignKey("Gyms.gym_id", ondelete='CASCADE'), nullable=False)
 
-    gym = db.relationship("Gym", foreign_keys="[Workouts.gym_id]", back_populates='workouts')
+    gym = db.relationship("Gyms", foreign_keys="[Workouts.gym_id]", back_populates='workouts')
     exercises = db.relationship("Exercises", secondary=workouts_exercises_association_table, back_populates='workouts')
 
     def __init__(self, workout_name, description, length, gym_id):

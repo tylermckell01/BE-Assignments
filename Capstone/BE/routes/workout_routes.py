@@ -18,9 +18,9 @@ def read_all_workouts():
     return controllers.read_workouts(request)
 
 
-@workout.route('/workouts/active', methods=['GET'])
-def read_all_active_workouts():
-    return controllers.read_active_workouts(request)
+@workout.route('/workouts/length', methods=['GET'])
+def read_workouts_by_length():
+    return controllers.read_workouts_by_length(request)
 
 
 @workout.route('/workouts/gym/<id>', methods=['GET'])
