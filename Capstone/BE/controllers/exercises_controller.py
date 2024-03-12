@@ -6,69 +6,69 @@ from models.exercises import Exercises, exercise_schema, exercises_schema
 from util.reflection import populate_object
 
 
-# category CREATE functions
+# exercise CREATE functions
 @auth_admin
-def create_category(req):
+def create_exercise(req):
     post_data = req.form if req.form else req.json
 
-    category_name = post_data.get('category_name')
-    exists_query = db.session.query(Categories).filter(Categories.category_name == category_name).first()
+    exercise_name = post_data.get('exercise_name')
+    exists_query = db.session.query(Exercises).filter(Exercises.exercise_name == exercise_name).first()
 
     if exists_query:
-        return jsonify({'message': f'category "{category_name}" already exists in the database'}), 400
+        return jsonify({'message': f'exercise "{exercise_name}" already exists in the database'}), 400
 
-    new_category = Categories.new_category_obj()
-    populate_object(new_category, post_data)
+    new_exercise = Exercises.new_exercise_obj()
+    populate_object(new_exercise, post_data)
 
     try:
-        db.session.add(new_category)
+        db.session.add(new_exercise)
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({'message': 'category could not be created'}), 400
+        return jsonify({'message': 'exercise could not be created'}), 400
 
-    return jsonify({'message': 'category created', 'result': category_schema.dump(new_category)}), 201
+    return jsonify({'message': 'exercise created', 'result': exercise_schema.dump(new_exercise)}), 201
 
 
-# category READ functions
+# exercise READ functions
 @auth
-def read_categories(req):
-    category_query = db.session.query(Categories).all()
+def read_exercises(req):
+    exercise_query = db.session.query(Exercises).all()
 
-    return jsonify({'message': 'categories found', 'result': categories_schema.dump(category_query)}), 200
+    return jsonify({'message': 'exercises found', 'result': exercises_schema.dump(exercise_query)}), 200
 
 
 @auth
-def read_by_category_id(req, category_id):
-    category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
+def read_by_exercise_id(req, exercise_id):
+    exercise_query = db.session.query(Exercises).filter(Exercises.exercise_id == exercise_id).first()
 
-    return jsonify({'message': 'category found', 'result': category_schema.dump(category_query)}), 200
+    return jsonify({'message': 'exercise found', 'result': exercise_schema.dump(exercise_query)}), 200
 
 
-# category UPDATE functions
+# exercise UPDATE functions
 @auth_admin
-def update_category_name(req, category_id):
+def update_exercise_name(req, exercise_id):
     post_data = req.form if req.form else req.json
-    category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
+    exercise_query = db.session.query(Exercises).filter(Exercises.exercise_id == exercise_id).first()
 
-    populate_object(category_query, post_data)
+    populate_object(exercise_query, post_data)
 
     try:
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({'message': 'category could not be updated'}), 400
+        return jsonify({'message': 'exercise could not be updated'}), 400
 
-    return jsonify({'message': 'category updated', 'result': category_schema.dump(category_query)}), 200
+    return jsonify({'message': 'exercise updated', 'result': exercise_schema.dump(exercise_query)}), 200
 
 
-# category DELETE functions
+# exercise DELETE functions
 @auth_admin
-def delete_category(req, category_id):
-    query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
+def delete_exercise(req, exercise_id):
+    query = db.session.query(Exercises).filter(Exercises.exercise_id == exercise_id).first()
 
     if not query:
-        return jsonify({"message": f"category does not exist"}), 400
+        return jsonify({"message": f"exercise does not exist"}), 400
 
     try:
         db.session.delete(query)
@@ -77,4 +77,4 @@ def delete_category(req, category_id):
         db.session.rollback()
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "category deleted"}), 200
+    return jsonify({"message": "exercise deleted"}), 200

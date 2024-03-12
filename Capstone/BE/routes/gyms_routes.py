@@ -5,30 +5,30 @@ import controllers
 gyms = Blueprint('gyms', __name__)
 
 
-# company CREATE routes
-@gyms.route('/company', methods=['POST'])
-def create_new_company():
-    return controllers.create_company(request)
+# gym CREATE routes
+@gyms.route('/gym', methods=['POST'])
+def create_new_gym():
+    return controllers.create_gym(request)
 
 
-# company READ routes
-@gyms.route('/companies', methods=['GET'])
-def read_all_companies():
-    return controllers.read_companies(request)
+# gym READ routes
+@gyms.route('/gyms', methods=['GET'])
+def read_all_gyms():
+    return controllers.read_gyms(request)
 
 
-@gyms.route('/company/<id>', methods=['GET'])
-def read_company_by_id(id):
-    return controllers.read_company_by_id(request, id)
+@gyms.route('/gym/<id>', methods=['GET'])
+def read_gym_by_id(id):
+    return controllers.read_gym_by_id(request, id)
 
 
-# company UPDATE route
-@gyms.route('/company/<id>', methods=['PUT'])
-def update_company_name_by_id(id):
-    return controllers.update_company_name(request, id)
+# gym UPDATE route
+@gyms.route('/gym/<id>', methods=['PUT'])
+def update_gym_name_by_id(id):
+    return controllers.update_gym_name(request, id)
 
 
-# company DELETE route
-@gyms.route('/company/delete/<id>', methods=['DELETE'])
-def delete_company_by_id(id):
-    return controllers.delete_company(request, id)
+# gym DELETE route
+@gyms.route('/gym/delete/<id>', methods=['DELETE'])
+def delete_gym_by_id(id):
+    return controllers.delete_gym(request, id)

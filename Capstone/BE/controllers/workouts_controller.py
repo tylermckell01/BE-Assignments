@@ -7,100 +7,100 @@ from models.exercises import Exercises
 from util.reflection import populate_object
 
 
-# product CREATE functions
+# workouts CREATE functions
 @auth_admin
-def create_product(req):
+def create_workout(req):
     post_data = req.form if req.form else req.json
 
-    product_name = post_data.get('product_name')
-    exists_query = db.session.query(Products).filter(Products.product_name == product_name).first()
+    workout_name = post_data.get('workout_name')
+    exists_query = db.session.query(Workouts).filter(Workouts.workout_name == workout_name).first()
 
     if exists_query:
-        return jsonify({'message': f'product "{product_name}" already exists in the database'}), 400
+        return jsonify({'message': f'workout "{workout_name}" already exists in the database'}), 400
 
-    new_product = Products.new_product_obj()
-    populate_object(new_product, post_data)
+    new_workout = Workouts.new_workout_obj()
+    populate_object(new_workout, post_data)
 
     try:
-        db.session.add(new_product)
+        db.session.add(new_workout)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        return jsonify({'message': 'product could not be created'}), 400
+        return jsonify({'message': 'workout could not be created'}), 400
 
-    return jsonify({'message': 'product created', 'result': product_schema.dump(new_product)}), 201
+    return jsonify({'message': 'workout created', 'result': workout_schema.dump(new_workout)}), 201
 
 
-# product read functions
+# workout read functions
 @auth
-def read_products(req):
-    product_query = db.session.query(Products).all()
+def read_workouts(req):
+    workout_query = db.session.query(Workouts).all()
 
-    return jsonify({'message': 'products found', 'result': products_schema.dump(product_query)}), 200
-
-
-@auth
-def read_active_products(req):
-    product_query = db.session.query(Products).filter(Products.active == True).all()
-
-    return jsonify({'message': 'product found', 'result': products_schema.dump(product_query)}), 200
+    return jsonify({'message': 'workouts found', 'result': workouts_schema.dump(workout_query)}), 200
 
 
 @auth
-def read_products_by_company_id(req, company_id):
-    product_query = db.session.query(Products).filter(Products.company_id == company_id).all()
+def read_active_workouts(req):
+    workout_query = db.session.query(Workouts).filter(Workouts.active == True).all()
 
-    return jsonify({'message': 'product found', 'result': products_schema.dump(product_query)}), 200
+    return jsonify({'message': 'workout found', 'result': workouts_schema.dump(workout_query)}), 200
 
 
 @auth
-def read_product_by_id(req, product_id):
-    product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
+def read_workouts_by_gym_id(req, gym_id):
+    workout_query = db.session.query(Workouts).filter(Workouts.gym_id == gym_id).all()
 
-    return jsonify({'message': 'product found', 'result': product_schema.dump(product_query)}), 200
+    return jsonify({'message': 'workout found', 'result': workouts_schema.dump(workout_query)}), 200
 
 
-# product update functions
+@auth
+def read_workout_by_id(req, workout_id):
+    workout_query = db.session.query(Workouts).filter(Workouts.workout_id == workout_id).first()
+
+    return jsonify({'message': 'workout found', 'result': workout_schema.dump(workout_query)}), 200
+
+
+# workout update functions
 @auth_admin
-def update_product_by_id(req, product_id):
+def update_workout_by_id(req, workout_id):
     post_data = req.form if req.form else req.json
-    product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
+    workout_query = db.session.query(Workouts).filter(Workouts.workout_id == workout_id).first()
 
-    populate_object(product_query, post_data)
+    populate_object(workout_query, post_data)
 
     try:
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({'message': 'product could not be updated'}), 400
+        return jsonify({'message': 'workout could not be updated'}), 400
 
-    return jsonify({'message': 'product updated', 'result': product_schema.dump(product_query)}), 200
+    return jsonify({'message': 'workout updated', 'result': workout_schema.dump(workout_query)}), 200
 
 
-# add product-category-xref record
+# add workout-exercise-xref record
 @auth_admin
-def product_add_category(req):
+def workout_add_exercise(req):
     post_data = req.form if req.form else req.json
-    product_id = post_data.get('product_id')
-    category_id = post_data.get('category_id')
+    workout_id = post_data.get('workout_id')
+    exercise_id = post_data.get('exercise_id')
 
-    product_query = db.session.query(Products).filter(Products.product_id == product_id).first()
-    category_query = db.session.query(Categories).filter(Categories.category_id == category_id).first()
+    workout_query = db.session.query(Workouts).filter(Workouts.workout_id == workout_id).first()
+    exercise_query = db.session.query(Exercises).filter(Exercises.exercise_id == exercise_id).first()
 
-    product_query.categories.append(category_query)
+    workout_query.exercises.append(exercise_query)
     db.session.commit()
 
-    return jsonify({'message': 'relationship added.', 'product info': product_schema.dump(product_query)}), 200
+    return jsonify({'message': 'relationship added.', 'workout info': workout_schema.dump(workout_query)}), 200
 
-# product delete function
+# workout delete function
 
 
 @auth_admin
-def delete_product(req, product_id):
-    query = db.session.query(Products).filter(Products.product_id == product_id).first()
+def delete_workout(req, workout_id):
+    query = db.session.query(Workouts).filter(Workouts.workout_id == workout_id).first()
 
     if not query:
-        return jsonify({"message": f"product by id {product_id} does not exist"}), 400
+        return jsonify({"message": f"workout by id {workout_id} does not exist"}), 400
 
     try:
         db.session.delete(query)
@@ -109,4 +109,4 @@ def delete_product(req, product_id):
         db.session.rollback()
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "product has been deleted"}), 200
+    return jsonify({"message": "workout has been deleted"}), 200

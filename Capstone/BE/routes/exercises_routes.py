@@ -4,32 +4,32 @@ import controllers
 
 exercises = Blueprint('exercises', __name__)
 
-# category CREATE routes
+# exercise CREATE routes
 
 
-@exercises.route('/category', methods=['POST'])
-def create_new_category():
-    return controllers.create_category(request)
+@exercises.route('/exercise', methods=['POST'])
+def create_new_exercise():
+    return controllers.create_exercise(request)
 
 
-# category READ routes
-@exercises.route('/categories', methods=['GET'])
-def read_all_categories():
-    return controllers.read_categories(request)
+# exercise READ routes
+@exercises.route('/exercises', methods=['GET'])
+def read_all_exercises():
+    return controllers.read_exercises(request)
 
 
-@exercises.route('/category/<id>', methods=['GET'])
-def read_by_category_id(id):
-    return controllers.read_by_category_id(request, id)
+@exercises.route('/exercise/<id>', methods=['GET'])
+def read_by_exercise_id(id):
+    return controllers.read_by_exercise_id(request, id)
 
 
-# category UPDATE routes
-@exercises.route('/category/<id>', methods=['PUT'])
-def update_category_name_by_id(id):
-    return controllers.update_category_name(request, id)
+# exercise UPDATE routes
+@exercises.route('/exercise/<id>', methods=['PUT'])
+def update_exercise_name_by_id(id):
+    return controllers.update_exercise_name(request, id)
 
 
-# category DELETE routes
-@exercises.route('/category/delete/<id>', methods=['DELETE'])
-def delete_category_by_id(id):
-    return controllers.delete_category(request, id)
+# exercise DELETE routes
+@exercises.route('/exercise/delete/<id>', methods=['DELETE'])
+def delete_exercise_by_id(id):
+    return controllers.delete_exercise(request, id)

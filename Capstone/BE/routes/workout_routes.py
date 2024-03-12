@@ -5,48 +5,48 @@ import controllers
 workout = Blueprint('workout', __name__)
 
 
-# product CREATE routes
+# workouts CREATE routes
 
-@workout.route('/product', methods=['POST'])
-def create_new_product():
-    return controllers.create_product(request)
-
-
-# product READ routes
-@workout.route('/products', methods=['GET'])
-def read_all_products():
-    return controllers.read_products(request)
+@workout.route('/workout', methods=['POST'])
+def create_new_workout():
+    return controllers.create_workout(request)
 
 
-@workout.route('/products/active', methods=['GET'])
-def read_all_active_products():
-    return controllers.read_active_products(request)
+# workout READ routes
+@workout.route('/workouts', methods=['GET'])
+def read_all_workouts():
+    return controllers.read_workouts(request)
 
 
-@workout.route('/products/company/<id>', methods=['GET'])
-def read_all_products_by_company_id(id):
-    return controllers.read_products_by_company_id(request, id)
+@workout.route('/workouts/active', methods=['GET'])
+def read_all_active_workouts():
+    return controllers.read_active_workouts(request)
 
 
-@workout.route('/product/<id>', methods=["GET"])
-def read_product_by_product_id(id):
-    return controllers.read_product_by_id(request, id)
+@workout.route('/workouts/gym/<id>', methods=['GET'])
+def read_all_workouts_by_gym_id(id):
+    return controllers.read_workouts_by_gym_id(request, id)
 
 
-# product UPDATE route
-@workout.route('/product/<id>', methods=['PUT'])
-def update_product(id):
-    return controllers.update_product_by_id(request, id)
+@workout.route('/workout/<id>', methods=["GET"])
+def read_workout_by_workout_id(id):
+    return controllers.read_workout_by_id(request, id)
+
+
+# workout UPDATE route
+@workout.route('/workout/<id>', methods=['PUT'])
+def update_workout(id):
+    return controllers.update_workout_by_id(request, id)
 
 
 # CREATE xref route
-@workout.route('/product/category', methods=['POST'])
+@workout.route('/workout/exercise', methods=['POST'])
 def add_xref():
-    return controllers.product_add_category(request)
+    return controllers.workout_add_exercise(request)
 
-# product DELETE route
+# workout DELETE route
 
 
-@workout.route('/product/delete/<id>', methods=['DELETE'])
-def delete_product_by_id(id):
-    return controllers.delete_product(request, id)
+@workout.route('/workout/delete/<id>', methods=['DELETE'])
+def delete_workout_by_id(id):
+    return controllers.delete_workout(request, id)
