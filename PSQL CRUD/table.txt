@@ -7,8 +7,10 @@ database(# company_name VARCHAR UNIQUE,
 database(# price INTEGER,
 database(# description VARCHAR,
 database(# active BOOLEAN,
+);
 
 
 database=# CREATE TABLE IF NOT EXISTS categories (
 database(# category_id SERIAL PRIMARY KEY,
 database(# category_name VARCHAR UNIQUE NOT NULL,
+);
