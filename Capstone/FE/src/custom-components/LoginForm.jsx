@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthInfo } from "../context/AuthContext";
 
 export default function LoginForm() {
-  const { setIsLoggedIn } = useAuthInfo();
+  const { isLoggedIn, setIsLoggedIn, login } = useAuthInfo();
 
   const [loginCreds, setLoginCreds] = useState({
     email: "",

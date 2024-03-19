@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useAuthInfo } from "../context/AuthContext";
 
 export default function AuthHeader() {
-  const { logout } = useAuthInfo();
+  const { logout, isLoggedIn } = useAuthInfo();
 
   return (
     <div className="header-container">
@@ -11,9 +11,13 @@ export default function AuthHeader() {
           Fitness Tracker
         </NavLink>
 
-        <NavLink to="/login" className="header-link">
-          Login
-        </NavLink>
+        {isLoggedIn ? (
+          <div />
+        ) : (
+          <NavLink to="/login" className="header-link">
+            Login
+          </NavLink>
+        )}
 
         <NavLink to="/my-workouts" className="header-link">
           my workouts

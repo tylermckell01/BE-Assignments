@@ -1,11 +1,13 @@
 import { useState } from "react";
+import asyncApiCall from "../utl/asyncApiCall";
+import Cookies from "js-cookie";
 
 export default function NewWorkoutForm() {
   const [formData, setFormData] = useState({
     workout_name: "",
     workout_description: "",
-    workout_length: "",
-    gym_name: "",
+    workout_length: 0,
+    gym_id: "",
   });
 
   const handleFieldUpdate = (e) => {
@@ -14,10 +16,27 @@ export default function NewWorkoutForm() {
     setFormData((previous) => ({ ...previous, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("you submitted correctly, now wire it up to your BE!!");
+    let authToken = Cookies.get("auth_token");
+    const response = await fetch("http://127.0.0.1:8086/workout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: authToken,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      console.log("create new workout successful");
+      console.log(response);
+      return response;
+    } else {
+      console.log(authToken);
+      console.error("create new workout failed");
+    }
   };
 
   return (
@@ -55,13 +74,13 @@ export default function NewWorkoutForm() {
             onChange={handleFieldUpdate}
           />
 
-          <label htmlFor="gym-name">gym name</label>
+          <label htmlFor="gym-id">gym id</label>
           <input
-            id="gym-name"
-            name="gym_name"
-            value={formData.gym_name}
+            id="gym-id"
+            name="gym_id"
+            value={formData.gym_id}
             type="text"
-            className="gym-name"
+            className="gym-id"
             onChange={handleFieldUpdate}
           />
           <button type="submit">Add this workout!</button>
