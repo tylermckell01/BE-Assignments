@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useAuthInfo } from "../context/AuthContext";
+import Cookies from "js-cookie";
 
 export default function LoginForm() {
-  const { isLoggedIn, setIsLoggedIn, login } = useAuthInfo();
+  const { isLoggedIn, setIsLoggedIn, setGetAuthToken } = useAuthInfo();
 
   const [loginCreds, setLoginCreds] = useState({
     email: "",
@@ -26,10 +27,12 @@ export default function LoginForm() {
       body: JSON.stringify(loginCreds),
     });
 
-    if (response) {
+    if (response.ok) {
       setIsLoggedIn(true);
       console.log("authentication successful");
       console.log(response);
+      Cookies.set("auth_token", response.auth_token);
+      return response.json();
     } else {
       console.error("authentication failed");
     }
