@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useWorkoutContext } from "../context/AppDataContext";
+import { useAppData } from "../context/AppDataContext";
 
 export default function MyWorkoutCards() {
   const [yourWorkoutData, setYourWorkoutData] = useState([]);
@@ -9,13 +9,6 @@ export default function MyWorkoutCards() {
   useEffect(() => {
     fetchWorkoutData();
   }, []);
-
-  // const fetchWorkoutData = async () => {
-  //   const response = await fetch(URL);
-
-  //   const jsonData = await response.json();
-  //   setYourWorkoutData(jsonData);
-  // };
 
   const fetchWorkoutData = async () => {
     try {

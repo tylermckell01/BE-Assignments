@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthInfo } from "../context/AuthContext";
 
 export default function LoginForm() {
-  // const { login } = useAuthInfo();
+  const { setIsLoggedIn } = useAuthInfo();
 
   const [loginCreds, setLoginCreds] = useState({
     email: "",
@@ -15,10 +15,24 @@ export default function LoginForm() {
     setLoginCreds((previous) => ({ ...previous, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("you submitted correctly, now wire it up to your BE!!");
+    const response = await fetch("http://127.0.0.1:8086/user/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginCreds),
+    });
+
+    if (response) {
+      setIsLoggedIn(true);
+      console.log("authentication successful");
+      console.log(response);
+    } else {
+      console.error("authentication failed");
+    }
   };
 
   return (

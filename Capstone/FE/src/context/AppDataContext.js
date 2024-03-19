@@ -1,21 +1,15 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
-const WorkoutContext = createContext();
+const AppDataContext = createContext();
 
-export const WorkoutContextProvider = ({ children }) => {
-  const [yourWorkoutCards, setYourWorkoutCards] = useState([]);
-
-  function handleSetYourWorkoutCards(value) {
-    setYourWorkoutCards(value);
-  }
-
-  const values = { yourWorkoutCards, handleSetYourWorkoutCards };
+export const AppDataContextProvider = ({ children }) => {
+  const values = {};
 
   return (
-    <WorkoutContext.Provider value={values}>{children}</WorkoutContext.Provider>
+    <AppDataContext.Provider value={values}>{children}</AppDataContext.Provider>
   );
 };
 
-export const useWorkoutContext = () => {
-  return useContext(WorkoutContext);
+export const useAppData = () => {
+  return useContext(AppDataContext);
 };
