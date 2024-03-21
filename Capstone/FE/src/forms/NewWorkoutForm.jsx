@@ -5,9 +5,9 @@ import Cookies from "js-cookie";
 export default function NewWorkoutForm() {
   const [formData, setFormData] = useState({
     workout_name: "",
-    workout_description: "",
-    workout_length: 0,
-    gym_id: "",
+    description: "",
+    length: 0,
+    // gym_id: "",
   });
 
   const handleFieldUpdate = (e) => {
@@ -57,8 +57,8 @@ export default function NewWorkoutForm() {
           <label htmlFor="workout-description">workout description</label>
           <input
             id="workout-description"
-            name="workout_description"
-            value={formData.workout_description}
+            name="description"
+            value={formData.description}
             type="text"
             className="workout-description"
             onChange={handleFieldUpdate}
@@ -67,14 +67,14 @@ export default function NewWorkoutForm() {
           <label htmlFor="workout-length">workout length</label>
           <input
             id="workout-length"
-            name="workout_length"
-            value={formData.workout_length}
+            name="length"
+            value={formData.length}
             type="text"
             className="workout-length"
             onChange={handleFieldUpdate}
           />
 
-          <label htmlFor="gym-id">gym id</label>
+          {/* <label htmlFor="gym-id">gym id</label>
           <input
             id="gym-id"
             name="gym_id"
@@ -82,7 +82,7 @@ export default function NewWorkoutForm() {
             type="text"
             className="gym-id"
             onChange={handleFieldUpdate}
-          />
+          /> */}
           <button type="submit">Add this workout!</button>
         </div>
       </form>

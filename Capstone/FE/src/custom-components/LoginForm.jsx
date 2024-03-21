@@ -25,14 +25,17 @@ export default function LoginForm() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(loginCreds),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => data);
 
-    if (response.ok) {
+    console.log("res: ", response);
+
+    if (response) {
       setIsLoggedIn(true);
       console.log("authentication successful");
-      console.log(response);
-      Cookies.set("auth_token", response.auth_token);
-      return response.json();
+      Cookies.set("auth_token", response.auth_info.auth_token);
+      return response;
     } else {
       console.error("authentication failed");
     }
