@@ -14,7 +14,6 @@ def create_workout(req):
 
     workout_name = post_data.get('workout_name')
     exists_query = db.session.query(Workouts).filter(Workouts.workout_name == workout_name).first()
-
     if exists_query:
         return jsonify({'message': f'workout "{workout_name}" already exists in the database'}), 400
 
@@ -25,6 +24,7 @@ def create_workout(req):
         db.session.add(new_workout)
         db.session.commit()
     except Exception as e:
+        print("exception", e)
         db.session.rollback()
         return jsonify({'message': 'workout could not be created'}), 400
 
