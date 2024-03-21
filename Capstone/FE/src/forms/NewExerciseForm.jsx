@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 export default function NewExerciseForm() {
   const [formData, setFormData] = useState({
@@ -12,10 +13,26 @@ export default function NewExerciseForm() {
     setFormData((previous) => ({ ...previous, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("you submitted correctly, now wire it up to your BE!!");
+    let authToken = Cookies.get("auth_token");
+    const response = await fetch("http://127.0.0.1:8086/exercise", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: authToken,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response) {
+      console.log("create new exercise successful");
+      console.log(response);
+      return response;
+    } else {
+      console.error("create new exercise failed");
+    }
   };
 
   return (

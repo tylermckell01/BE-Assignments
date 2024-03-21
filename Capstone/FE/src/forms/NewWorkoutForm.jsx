@@ -29,12 +29,11 @@ export default function NewWorkoutForm() {
       body: JSON.stringify(formData),
     });
 
-    if (response.ok) {
+    if (response) {
       console.log("create new workout successful");
       console.log(response);
       return response;
     } else {
-      console.log(authToken);
       console.error("create new workout failed");
     }
   };
