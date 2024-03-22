@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useAppData } from "../context/AppDataContext";
 import Cookies from "js-cookie";
 
 export default function MyWorkoutCards() {
   const [yourWorkoutData, setYourWorkoutData] = useState([]);
+  const [editingWorkout, setEditingWorkout] = useState(null);
 
   useEffect(() => {
     fetchWorkoutData();
@@ -26,15 +26,49 @@ export default function MyWorkoutCards() {
     console.log("piece of state", yourWorkoutData);
   };
 
+  const deleteWorkout = () => {
+    console.log("delete workout");
+  };
+
+  const editWorkout = (workout) => {
+    console.log("edit workout", workout);
+
+    setEditingWorkout(workout);
+  };
+
+  const saveEditedWorkout = () => {
+    // UPDATE apicall here?
+    console.log("edited workout saved");
+    setEditingWorkout(null);
+  };
+
   const renderWorkoutdata = () => {
-    console.log("render function", yourWorkoutData);
+    if (yourWorkoutData.length === 0) {
+      return <div>No workout data available.</div>;
+    }
+
     return yourWorkoutData?.map((workout, idx) => {
       return (
         <div className="workout-info" key={idx}>
-          {workout.workout_name}
-          {workout.description}
-          {workout.exercises}
-          {/* {workout.results.length} */}
+          <div className="workout-name">{workout.workout_name}</div>
+          <div className="workout-description">{workout.description}</div>
+          <div className="workout-exercises">
+            {workout.exercises.map((exercise, exerciseIdx) => (
+              <div key={exerciseIdx}>
+                <div className="exercise-name">{exercise.exercise_name}</div>
+                <div className="muscles-worked">{exercise.muscles_worked}</div>
+              </div>
+            ))}
+          </div>
+          <div className="button-container">
+            <button onClick={() => editWorkout(workout)}>edit</button>
+            <button onClick={deleteWorkout}>delete</button>
+          </div>
+          {editingWorkout === workout && (
+            <div className="edit-modal">
+              <button onClick={saveEditedWorkout}>save</button>
+            </div>
+          )}
         </div>
       );
     });
@@ -42,11 +76,7 @@ export default function MyWorkoutCards() {
 
   return (
     <div className="my-workout-cards-container">
-      <div className="cards-wrapper">here are your workout cards</div>
-      <div>
-        this will be a card
-        {renderWorkoutdata()}
-      </div>
+      <div className="cards-wrapper">{renderWorkoutdata()}</div>
     </div>
   );
 }
